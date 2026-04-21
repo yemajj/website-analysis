@@ -39,6 +39,12 @@ jobs:
             --max-pages ${{ inputs.max_pages }} \
             --output site-analysis
 
+      - name: Redact known secrets
+        run: |
+          python scripts/redact_secrets.py \
+            --root site-analysis/original \
+            --log site-analysis/security-findings.txt
+
       - name: Commit results
         run: |
           git config user.name "github-actions[bot]"
