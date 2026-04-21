@@ -1,0 +1,52 @@
+name: Site Crawl
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Target URL"
+        required: false
+        default: "https://www.ruttyandmorris.com"
+      max_depth:
+        description: "Max crawl depth"
+        required: false
+        default: "3"
+      max_pages:
+        description: "Hard cap on pages"
+        required: false
+        default: "200"
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Run crawler
+        run: |
+          python scripts/crawl.py \
+            --target "${{ inputs.target }}" \
+            --max-depth ${{ inputs.max_depth }} \
+            --max-pages ${{ inputs.max_pages }} \
+            --output site-analysis
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add site-analysis
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "crawl: snapshot of ${{ inputs.target }}"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
