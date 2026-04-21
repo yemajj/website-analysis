@@ -18,11 +18,50 @@ import re
 import sys
 from pathlib import Path
 
-# hCaptcha server-side (Siteverify) secrets are 0x + 40 hex chars.
-# Public site keys use a different format and are safe to commit.
-PATTERNS: list[tuple[str, re.Pattern[str]]] = [
-    ("hcaptcha_siteverify_secret", re.compile(r"\b0x[0-9A-Fa-f]{40}\b")),
+# --- Token-shape patterns -------------------------------------------------
+# Values that look like credentials regardless of surrounding HTML.
+# hCaptcha secret keys have historically been 0x + 40 hex (Ethereum-address
+# shaped); newer keys are ES_ prefixed. We go broader than strictly needed
+# because our last run missed the template-embedded value — belt-and-braces.
+TOKEN_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
+    # 0x + 30-80 hex (covers hCaptcha classic, including any odd length)
+    ("hex0x_token", re.compile(r"0[xX][0-9A-Fa-f]{30,80}")),
+    # ES_ + base64-ish (hCaptcha new-style secret)
+    ("es_prefixed_secret", re.compile(r"\bES_[A-Za-z0-9_\-]{20,80}\b")),
 ]
+
+# --- Structural scrubbers -------------------------------------------------
+# Targets the *structure* of HTML where secrets commonly land, independent
+# of the token's exact shape. Not in TOKEN_PATTERNS because they mutate the
+# surrounding markup rather than a raw substring.
+
+# Any attribute whose NAME contains "secret" (case-insensitive).
+# Matches attribute name, '=', quoted value. Captures name+opening-quote
+# and closing-quote so we can replace just the value.
+SECRET_ATTR_RE = re.compile(
+    r"""
+    (
+        [A-Za-z_][A-Za-z0-9_:\-]*secret[A-Za-z0-9_:\-]*
+        \s*=\s*
+        ["']
+    )
+    [^"']*
+    (["'])
+    """,
+    re.IGNORECASE | re.VERBOSE,
+)
+
+# <input type="hidden" ...> full open tag.
+HIDDEN_INPUT_TAG_RE = re.compile(
+    r"""<input\b[^>]*\btype\s*=\s*["']hidden["'][^>]*>""",
+    re.IGNORECASE,
+)
+
+# value="..." or value='...' within a single tag.
+VALUE_ATTR_RE = re.compile(
+    r"""(\bvalue\s*=\s*)(?:"[^"]*"|'[^']*')""",
+    re.IGNORECASE,
+)
 
 
 def is_binary(path: Path) -> bool:
@@ -41,6 +80,45 @@ def iter_text_files(root: Path):
             yield p
 
 
+def _token_sub(findings: list[tuple[str, str]], name: str):
+    def _sub(m: re.Match[str]) -> str:
+        token = m.group(0)
+        digest = hashlib.sha256(token.encode()).hexdigest()[:16]
+        findings.append((name, digest))
+        return f"[REDACTED:{name}:{digest}]"
+    return _sub
+
+
+def _secret_attr_sub(findings: list[tuple[str, str]]):
+    def _sub(m: re.Match[str]) -> str:
+        attr_prefix = m.group(1)  # 'name="' or similar
+        close_quote = m.group(2)
+        full = m.group(0)
+        # Hash the full match (attribute + value) so each redaction is
+        # distinguishable; we don't isolate the raw value because the
+        # regex captures don't cleanly separate it from quotes.
+        digest = hashlib.sha256(full.encode()).hexdigest()[:16]
+        findings.append(("secret_attr", digest))
+        return f"{attr_prefix}[REDACTED:secret_attr:{digest}]{close_quote}"
+    return _sub
+
+
+def _hidden_input_sub(findings: list[tuple[str, str]]):
+    def _sub(m: re.Match[str]) -> str:
+        tag = m.group(0)
+        digest = hashlib.sha256(tag.encode()).hexdigest()[:16]
+
+        # Replace the value="..." inside this tag; leave other attrs alone.
+        def _val_sub(vm: re.Match[str]) -> str:
+            return f'{vm.group(1)}"[REDACTED:hidden_input:{digest}]"'
+
+        new_tag, n = VALUE_ATTR_RE.subn(_val_sub, tag)
+        if n:
+            findings.append(("hidden_input", digest))
+        return new_tag
+    return _sub
+
+
 def redact_file(path: Path) -> list[tuple[str, str]]:
     try:
         text = path.read_text(encoding="utf-8", errors="replace")
@@ -50,14 +128,11 @@ def redact_file(path: Path) -> list[tuple[str, str]]:
     findings: list[tuple[str, str]] = []
     new_text = text
 
-    for name, pat in PATTERNS:
-        def _sub(m: re.Match[str], _name: str = name) -> str:
-            token = m.group(0)
-            digest = hashlib.sha256(token.encode()).hexdigest()[:16]
-            findings.append((_name, digest))
-            return f"[REDACTED:{_name}:{digest}]"
+    for name, pat in TOKEN_PATTERNS:
+        new_text = pat.sub(_token_sub(findings, name), new_text)
 
-        new_text = pat.sub(_sub, new_text)
+    new_text = SECRET_ATTR_RE.sub(_secret_attr_sub(findings), new_text)
+    new_text = HIDDEN_INPUT_TAG_RE.sub(_hidden_input_sub(findings), new_text)
 
     if new_text != text:
         path.write_text(new_text, encoding="utf-8")
@@ -65,14 +140,18 @@ def redact_file(path: Path) -> list[tuple[str, str]]:
 
 
 def verify_clean(root: Path) -> list[tuple[Path, str, int]]:
-    """Return (path, pattern_name, count) for any residual matches."""
+    """Return (path, pattern_name, count) for any residual matches.
+
+    Only runs the token-shape patterns — structural scrubbers are
+    idempotent and their absence-of-match isn't meaningful to check.
+    """
     leaks: list[tuple[Path, str, int]] = []
     for p in iter_text_files(root):
         try:
             text = p.read_text(encoding="utf-8", errors="replace")
         except Exception:
             continue
-        for name, pat in PATTERNS:
+        for name, pat in TOKEN_PATTERNS:
             n = len(pat.findall(text))
             if n:
                 leaks.append((p, name, n))
@@ -98,7 +177,7 @@ def main() -> int:
     with args.log.open("w", encoding="utf-8") as f:
         if all_findings:
             f.write("# Secrets redacted from crawled output\n")
-            f.write("# Each line: path\\tpattern_name\\tsha256_prefix (of the original token)\n")
+            f.write("# Each line: path\\tpattern_name\\tsha256_prefix\n")
             f.write("# Placeholders in-file are [REDACTED:pattern_name:sha256_prefix].\n")
             for path, name, digest in all_findings:
                 f.write(f"{path}\t{name}\t{digest}\n")
@@ -114,7 +193,7 @@ def main() -> int:
             print(f"  {path}\t{name}\tcount={count}", file=sys.stderr)
         return 1
 
-    print("Verification: no residual matches under", args.root)
+    print("Verification: no residual token-shape matches under", args.root)
     return 0
 
 
