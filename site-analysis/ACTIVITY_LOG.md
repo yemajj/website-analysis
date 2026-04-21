@@ -104,6 +104,27 @@ each change.
   included.
 - **Commit:** `480d70e` — `Add responsible-disclosure email draft for
   hCaptcha secret leak`.
+- **Authored** `site-analysis/ACTIVITY_LOG.md` (this file).
+- **Commit:** `a32a67c` — `Add activity log capturing methodology and
+  security-finding handling`.
+
+### 2026-04-21 — Second crawl attempt
+
+- User re-ran **Site Crawl** workflow on branch
+  `claude/resume-work-uBFhI`.
+- Crawl and redact steps succeeded. Push protection did **not** fire
+  (confirming the redactor stripped the hCaptcha secret before commit).
+- Commit step failed with `! [rejected] HEAD -> claude/resume-work-uBFhI
+  (fetch first)` — non-fast-forward rejection. Cause: while the crawl
+  was running, two unrelated commits had landed on the branch
+  (`480d70e` disclosure email, `a32a67c` activity log), so the
+  workflow's local branch was behind.
+- **Fix:** updated the Commit step to `git pull --rebase origin
+  <branch>` before `git push`, with a 3-attempt retry. Bumped
+  `actions/checkout` `fetch-depth` to `0` so the rebase sees full
+  history.
+- **Commit:** `86f430b` — `Fix site-crawl race: rebase-then-push
+  with retry`.
 
 ### Pending
 
