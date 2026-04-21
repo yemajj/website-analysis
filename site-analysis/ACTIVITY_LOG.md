@@ -148,6 +148,31 @@ each change.
 - **Commit:** `c9a048a` — `Harden secret redactor: scan all
   non-binary files + verify`.
 
+### 2026-04-21 — Fourth crawl attempt
+
+- Crawl + redact ran; redactor's `verify_clean` reported no residual
+  matches, yet push protection still rejected on 15+ pages across
+  the site (`ice-machine-repair-*`, `thank-you`, `heating-and-cooling-*`,
+  `service-areas`, `refrigeration-*`, and the homepage).
+- **Root cause:** our regex `\b0x[0-9A-Fa-f]{40}\b` didn't match
+  whatever form the secret takes in the site's contact-form template.
+  Either the token length differs, the surrounding characters break
+  `\b`, or the format is hCaptcha's newer `ES_...` style. Without a
+  local copy we can't tell — GitHub's scanner is smarter than ours.
+- **Fix:** widened `scripts/redact_secrets.py` to cover three layers:
+  1. `TOKEN_PATTERNS` — `0x` + 30-80 hex (broader length range);
+     `ES_` + 20-80 base64-ish (newer hCaptcha secret format).
+  2. `SECRET_ATTR_RE` — any HTML attribute whose name contains
+     "secret" (case-insensitive) has its value replaced.
+  3. `HIDDEN_INPUT_TAG_RE` — every `<input type="hidden">` has its
+     `value` attribute scrubbed, regardless of the token's shape.
+     CSRF tokens and nonces get redacted too; they aren't
+     design-relevant.
+- Self-tested locally on three synthetic pages (classic hex, ES_
+  newer, generic template) — 7 redactions, verify clean.
+- **Commit:** `ccbb472` — `Broaden secret redaction: token shapes +
+  hidden-input + secret-attr`.
+
 ### Pending
 
 - User to re-trigger the Site Crawl workflow on branch
