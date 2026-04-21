@@ -126,6 +126,28 @@ each change.
 - **Commit:** `86f430b` — `Fix site-crawl race: rebase-then-push
   with retry`.
 
+### 2026-04-21 — Third crawl attempt
+
+- Crawl + redact ran; push was rejected by push protection again.
+  The rebase-retry fix worked (no fast-forward errors), but residual
+  secret matches remained after redaction.
+- **Diagnostic value of this failure:** the target site embeds the
+  hCaptcha server secret in **roughly every page that has the
+  contact form**, not just the two city pages we first saw. The
+  reported hits include the homepage, `service-areas`, all the
+  city-specific pages, and `refrigeration` pages. One hit lived in
+  an extension-less asset file (`assets/c6c730a769_about:94`).
+- **Root cause in our code:** the redactor only walked `*.html`
+  under `--root`, so the asset file was skipped. The pattern itself
+  matched fine, but the file wasn't visited.
+- **Fix:** rewrote `scripts/redact_secrets.py` to walk every
+  non-binary file under `--root` (NUL-byte check in the first 8 KB)
+  and to re-scan after redaction; returns non-zero if any pattern
+  still matches so the workflow fails in the redact step rather
+  than burning three push-protection retries.
+- **Commit:** `c9a048a` — `Harden secret redactor: scan all
+  non-binary files + verify`.
+
 ### Pending
 
 - User to re-trigger the Site Crawl workflow on branch
