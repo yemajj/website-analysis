@@ -68,6 +68,44 @@
       });
     }
 
+    /* ── 3b. Scroll Fade-Up (IntersectionObserver) ───────── */
+    var reduceMotion = window.matchMedia &&
+                       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var fadeTargets = document.querySelectorAll('.fade-up');
+
+    if (fadeTargets.length && !reduceMotion && 'IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+
+      fadeTargets.forEach(function (el) { observer.observe(el); });
+    } else {
+      // Reveal immediately if observer unavailable or motion reduced
+      fadeTargets.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+
+    /* ── 3c. Phone Input Formatter ───────────────────────── */
+    var phoneInput = document.querySelector('input[type="tel"]');
+    if (phoneInput) {
+      phoneInput.addEventListener('input', function () {
+        var digits = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+        var formatted = digits;
+        if (digits.length > 6) {
+          formatted = '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6);
+        } else if (digits.length > 3) {
+          formatted = '(' + digits.slice(0, 3) + ') ' + digits.slice(3);
+        } else if (digits.length > 0) {
+          formatted = '(' + digits;
+        }
+        phoneInput.value = formatted;
+      });
+    }
+
     /* ── 4. Contact Form Validation ──────────────────────── */
     var form = document.getElementById('contact-form');
     if (!form) return;

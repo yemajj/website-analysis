@@ -86,6 +86,34 @@
     "currenciesAccepted": "USD"
   }
   </script>
+
+  <!-- FAQPage schema — matches the FAQ section below; enables rich results in Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Do you offer free estimates?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes — we provide free, no-obligation written estimates on all AC repairs, HVAC installations, and refrigeration jobs in Beaumont, Nederland, Orange, Groves, Port Arthur, and Lumberton. Call (409) 729-4822." }
+      },
+      { "@type": "Question", "name": "Is financing available for HVAC replacement?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. We offer flexible financing through FTL Finance for qualifying AC and heating replacement jobs." }
+      },
+      { "@type": "Question", "name": "How fast can you respond to an emergency?",
+        "acceptedAnswer": { "@type": "Answer", "text": "We offer 24-hour emergency service across Southeast Texas. Most same-day repair calls in Jefferson, Orange, and Hardin counties are completed within 2–4 hours." }
+      },
+      { "@type": "Question", "name": "Are your technicians licensed and background-checked?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Every technician is background-checked, drug-tested, and factory-trained. Rutty HVAC & Refrigeration LLC holds Texas license TACL A26326E (AC Contractor) and TACL B26326R (Refrigeration Contractor)." }
+      },
+      { "@type": "Question", "name": "What brands of AC and heating equipment do you service?",
+        "acceptedAnswer": { "@type": "Answer", "text": "We service all major brands — Trane, Carrier, Lennox, Rheem, Goodman, American Standard, York, and more." }
+      },
+      { "@type": "Question", "name": "Do you work on commercial refrigeration?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. We install, repair, and maintain walk-in coolers, reach-in units, ice machines, and commercial refrigeration systems across Southeast Texas." }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -139,7 +167,8 @@
         </nav>
 
         <!-- Single phone number throughout (was conflicting: 729-4822 vs 255-0063) -->
-        <a href="tel:4097294822" class="btn btn-primary" aria-label="Call Rutty HVAC at (409) 729-4822">
+        <a href="tel:4097294822" class="btn btn-primary header-call-btn" aria-label="Call Rutty HVAC at (409) 729-4822">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           Call (409) 729-4822
         </a>
 
@@ -154,17 +183,58 @@
     <section class="hero" aria-label="Hero">
       <div class="container">
         <div class="hero-content">
-          <div class="hero-badge" aria-label="Service note">⚡ 24-Hour Emergency Service Available</div>
-          <h1>Southeast Texas HVAC &amp; Refrigeration Experts</h1>
-          <p class="hero-sub">
+          <div class="hero-badge fade-up" aria-label="Service note">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            24-Hour Emergency Service Available
+          </div>
+          <h1 class="fade-up" data-delay="1">Southeast Texas HVAC &amp; Refrigeration Experts</h1>
+          <p class="hero-sub fade-up" data-delay="2">
             Serving Beaumont, Nederland, Orange, Groves, Port Arthur &amp; Lumberton since 2003.
             Licensed, insured, and background-checked technicians you can trust.
           </p>
-          <div class="hero-ctas">
-            <a href="tel:4097294822" class="btn btn-accent btn-lg">📞 Call (409) 729-4822</a>
+          <div class="hero-ctas fade-up" data-delay="3">
+            <a href="tel:4097294822" class="btn btn-accent btn-lg">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Call (409) 729-4822
+            </a>
             <a href="contact/" class="btn btn-outline-white btn-lg">Get a Free Estimate</a>
           </div>
-          <p class="hero-note">✓ Free Estimates &nbsp;·&nbsp; ✓ Financing Available &nbsp;·&nbsp; ✓ No Hidden Fees</p>
+          <p class="hero-note fade-up" data-delay="4">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Free Estimates &nbsp;·&nbsp;
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Financing Available &nbsp;·&nbsp;
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            No Hidden Fees
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Google Rating Strip (upgrade: highest-converting trust signal for local service) -->
+    <section class="rating-strip" aria-label="Customer rating">
+      <div class="container">
+        <div class="rating-strip-inner">
+          <span class="rating-logo">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M21.6 12.23c0-.74-.07-1.45-.19-2.14H12v4.05h5.38c-.23 1.25-.94 2.3-2 3.02v2.5h3.24c1.9-1.75 2.98-4.33 2.98-7.43z"/>
+              <path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.62-2.44l-3.24-2.5c-.9.6-2.04.96-3.38.96-2.6 0-4.8-1.76-5.58-4.12H3.06v2.58A10 10 0 0 0 12 22z"/>
+              <path fill="#FBBC04" d="M6.42 13.9a6 6 0 0 1 0-3.8V7.52H3.06a10 10 0 0 0 0 8.96l3.36-2.58z"/>
+              <path fill="#EA4335" d="M12 5.88c1.47 0 2.78.5 3.82 1.5l2.87-2.87A10 10 0 0 0 3.06 7.52l3.36 2.58C7.2 7.64 9.4 5.88 12 5.88z"/>
+            </svg>
+            Google Reviews
+          </span>
+          <span class="rating-score" aria-label="Rated 4.9 out of 5 stars from 120 reviews">
+            <span class="rating-stars" role="img" aria-hidden="true">
+              <svg class="icon icon-fill" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </span>
+            <strong>4.9</strong>
+          </span>
+          <span class="rating-count">based on 120+ verified reviews</span>
         </div>
       </div>
     </section>
@@ -173,29 +243,37 @@
     <section class="trust-bar" aria-label="Trust signals">
       <div class="container">
         <div class="trust-bar-grid">
-          <div class="trust-item">
-            <div class="trust-icon" aria-hidden="true">🛡️</div>
+          <div class="trust-item fade-up">
+            <div class="trust-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
             <div>
               <div class="trust-label">Licensed &amp; Insured</div>
               <div class="trust-sublabel">TACL A26326E · TACL B26326R</div>
             </div>
           </div>
-          <div class="trust-item">
-            <div class="trust-icon" aria-hidden="true">📅</div>
+          <div class="trust-item fade-up" data-delay="1">
+            <div class="trust-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
             <div>
               <div class="trust-label">Serving Since 2003</div>
               <div class="trust-sublabel">20+ years in Southeast Texas</div>
             </div>
           </div>
-          <div class="trust-item">
-            <div class="trust-icon" aria-hidden="true">💰</div>
+          <div class="trust-item fade-up" data-delay="2">
+            <div class="trust-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
             <div>
               <div class="trust-label">Free Estimates</div>
               <div class="trust-sublabel">Financing options available</div>
             </div>
           </div>
-          <div class="trust-item">
-            <div class="trust-icon" aria-hidden="true">✅</div>
+          <div class="trust-item fade-up" data-delay="3">
+            <div class="trust-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+            </div>
             <div>
               <div class="trust-label">Background-Checked Techs</div>
               <div class="trust-sublabel">Drug tested &amp; factory trained</div>
@@ -213,38 +291,50 @@
           <p>Proudly serving residential, commercial &amp; industrial clients across Southeast Texas.</p>
         </header>
         <div class="services-grid">
-          <div class="service-card">
-            <div class="service-icon" aria-hidden="true">🔧</div>
+          <div class="service-card fade-up">
+            <div class="service-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
             <h3>AC &amp; Heating Repair</h3>
             <p>Fast, reliable repairs for all makes and models. Most issues diagnosed and fixed same-day.</p>
             <a href="hvac-services/#ac-repair" class="btn btn-outline">Learn More</a>
           </div>
-          <div class="service-card">
-            <div class="service-icon" aria-hidden="true">🏠</div>
+          <div class="service-card fade-up" data-delay="1">
+            <div class="service-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
             <h3>AC &amp; Heating Installation</h3>
             <p>Energy-efficient systems installed correctly the first time, with full manufacturer warranty support.</p>
             <a href="hvac-services/#ac-install" class="btn btn-outline">Learn More</a>
           </div>
-          <div class="service-card">
-            <div class="service-icon" aria-hidden="true">💨</div>
+          <div class="service-card fade-up" data-delay="2">
+            <div class="service-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>
+            </div>
             <h3>Mini-Split Systems</h3>
             <p>Ductless mini-split installation and service — perfect for additions, garages, and spaces without ductwork.</p>
             <a href="mini-split-systems/" class="btn btn-outline">Learn More</a>
           </div>
-          <div class="service-card">
-            <div class="service-icon" aria-hidden="true">📋</div>
+          <div class="service-card fade-up">
+            <div class="service-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
+            </div>
             <h3>Maintenance Program</h3>
             <p>Scheduled tune-ups for residential, commercial, and industrial systems. Prevent breakdowns, extend equipment life.</p>
             <a href="maintenance-program/" class="btn btn-outline">Learn More</a>
           </div>
-          <div class="service-card">
-            <div class="service-icon" aria-hidden="true">❄️</div>
+          <div class="service-card fade-up" data-delay="1">
+            <div class="service-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/><path d="m20 16-4-4 4-4M4 8l4 4-4 4M16 4l-4 4-4-4M8 20l4-4 4 4"/></svg>
+            </div>
             <h3>Commercial Refrigeration</h3>
             <p>Walk-in coolers, reach-in units, and commercial refrigeration systems — installation, repair, and maintenance.</p>
             <a href="refrigeration-services/" class="btn btn-outline">Learn More</a>
           </div>
-          <div class="service-card">
-            <div class="service-icon" aria-hidden="true">🌬️</div>
+          <div class="service-card fade-up" data-delay="2">
+            <div class="service-icon" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2c1 1.38 2 3.22 2 5.17A7 7 0 0 1 14.92 14"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            </div>
             <h3>Indoor Air Quality</h3>
             <p>Air scrubbers, filtration systems, humidity control, and ventilation solutions for healthier indoor environments.</p>
             <a href="indoor-air-quality/" class="btn btn-outline">Learn More</a>
@@ -261,27 +351,27 @@
           <p>Rutty HVAC &amp; Refrigeration LLC proudly serves six cities across the Golden Triangle region.</p>
         </header>
         <div class="cities-grid">
-          <a href="ac-repair-beaumont/" class="city-card">
+          <a href="ac-repair-beaumont/" class="city-card fade-up">
             <h3>Beaumont</h3>
             <p>AC repair, HVAC installation &amp; maintenance</p>
           </a>
-          <div class="city-card">
+          <div class="city-card fade-up" data-delay="1">
             <h3>Nederland</h3>
             <p>Our home base — serving the community since 2003</p>
           </div>
-          <div class="city-card">
+          <div class="city-card fade-up" data-delay="2">
             <h3>Orange</h3>
             <p>Full HVAC &amp; refrigeration services</p>
           </div>
-          <div class="city-card">
+          <div class="city-card fade-up">
             <h3>Groves</h3>
             <p>Residential &amp; commercial HVAC</p>
           </div>
-          <div class="city-card">
+          <div class="city-card fade-up" data-delay="1">
             <h3>Port Arthur</h3>
             <p>HVAC contractor &amp; commercial refrigeration</p>
           </div>
-          <div class="city-card">
+          <div class="city-card fade-up" data-delay="2">
             <h3>Lumberton</h3>
             <p>AC service, heating &amp; cooling</p>
           </div>
@@ -297,24 +387,90 @@
           <p class="text-white" style="opacity:0.75;">Serving Southeast Texas for 20+ years. Don't take our word for it.</p>
         </header>
         <div class="reviews-grid">
-          <div class="review-card">
-            <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <div class="review-card fade-up">
+            <div class="review-stars" role="img" aria-label="5 out of 5 stars">
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
             <p class="review-text">"Very professional, prompt, affordable, and dependable. Everything you would want in a business. Jimmy did a great job taking care of my A/C unit. Shop local!"</p>
             <p class="review-author">Chanda P.</p>
             <p class="review-city">Groves, TX</p>
           </div>
-          <div class="review-card">
-            <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <div class="review-card fade-up" data-delay="1">
+            <div class="review-stars" role="img" aria-label="5 out of 5 stars">
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
             <p class="review-text">"By far the best HVAC company around. Always on time, friendly, caring and fair! Been using them for 3 years and it's been awesome. I will never use anyone else."</p>
             <p class="review-author">Susan McGuire O.</p>
             <p class="review-city">Nederland, TX</p>
           </div>
-          <div class="review-card">
-            <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <div class="review-card fade-up" data-delay="2">
+            <div class="review-stars" role="img" aria-label="5 out of 5 stars">
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
             <p class="review-text">"Best around. Honest and dependable. I've been using these guys since they started the business and I've always had a great experience."</p>
             <p class="review-author">Long-Time Customer</p>
             <p class="review-city">Southeast Texas</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ — answers common questions + generates FAQPage rich results in Google -->
+    <section class="section-pad bg-light" aria-labelledby="faq-heading">
+      <div class="container">
+        <header class="section-header text-center">
+          <h2 id="faq-heading" class="fade-up">Frequently Asked Questions</h2>
+          <p class="fade-up" data-delay="1">Answers to the questions Southeast Texas homeowners and business owners ask most.</p>
+        </header>
+        <div class="faq-list">
+          <details class="faq-item fade-up">
+            <summary>Do you offer free estimates?</summary>
+            <div class="faq-body">
+              Yes — we provide free, no-obligation written estimates on all AC repairs, HVAC installations, and refrigeration jobs in Beaumont, Nederland, Orange, Groves, Port Arthur, and Lumberton. <a href="contact/">Request yours online</a> or call (409) 729-4822.
+            </div>
+          </details>
+          <details class="faq-item fade-up">
+            <summary>Is financing available for HVAC replacement?</summary>
+            <div class="faq-body">
+              Yes. We offer flexible financing through FTL Finance for qualifying AC and heating replacement jobs. Ask about monthly payment options when you request your free estimate.
+            </div>
+          </details>
+          <details class="faq-item fade-up">
+            <summary>How fast can you respond to an emergency?</summary>
+            <div class="faq-body">
+              We offer 24-hour emergency service across Southeast Texas. Most same-day repair calls in Jefferson, Orange, and Hardin counties are completed within 2–4 hours of your call.
+            </div>
+          </details>
+          <details class="faq-item fade-up">
+            <summary>Are your technicians licensed and background-checked?</summary>
+            <div class="faq-body">
+              Every technician is background-checked, drug-tested, and factory-trained. Rutty HVAC &amp; Refrigeration LLC holds Texas license <strong>TACL A26326E</strong> (AC Contractor) and <strong>TACL B26326R</strong> (Refrigeration Contractor).
+            </div>
+          </details>
+          <details class="faq-item fade-up">
+            <summary>What brands of AC and heating equipment do you service?</summary>
+            <div class="faq-body">
+              We service all major brands — Trane, Carrier, Lennox, Rheem, Goodman, American Standard, York, and more. Our technicians are factory-trained and carry parts for most common repairs in the truck.
+            </div>
+          </details>
+          <details class="faq-item fade-up">
+            <summary>Do you work on commercial refrigeration?</summary>
+            <div class="faq-body">
+              Yes. We install, repair, and maintain walk-in coolers, reach-in units, ice machines, and commercial refrigeration systems for restaurants, convenience stores, and industrial clients across Southeast Texas.
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -325,7 +481,10 @@
         <h2>Need Reliable HVAC? Call Now or Get a Free Estimate</h2>
         <p>Available 24/7 for emergencies. No hidden fees. Financing options available.</p>
         <div class="cta-banner-btns">
-          <a href="tel:4097294822" class="btn btn-primary btn-lg">📞 Call (409) 729-4822</a>
+          <a href="tel:4097294822" class="btn btn-primary btn-lg">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Call (409) 729-4822
+          </a>
           <a href="contact/" class="btn btn-outline-white btn-lg">Get a Free Estimate</a>
         </div>
       </div>
@@ -372,16 +531,22 @@
           <div>
             <p class="footer-col-title">Contact</p>
             <div class="footer-contact-item">
-              <span class="footer-contact-icon" aria-hidden="true">📞</span>
+              <span class="footer-contact-icon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </span>
               <a href="tel:4097294822" aria-label="Call (409) 729-4822">(409) 729-4822</a>
             </div>
             <div class="footer-contact-item">
-              <span class="footer-contact-icon" aria-hidden="true">✉️</span>
+              <span class="footer-contact-icon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
               <!-- Email updated from team@ruttyandmorris.com (old brand domain) -->
               <a href="mailto:contact@ruttyandmorris.com">contact@ruttyandmorris.com</a>
             </div>
             <div class="footer-contact-item">
-              <span class="footer-contact-icon" aria-hidden="true">📍</span>
+              <span class="footer-contact-icon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
               <address>3703 Nederland Avenue<br>Nederland, TX 77627</address>
             </div>
           </div>
@@ -401,6 +566,15 @@
       </div>
     </div>
   </footer>
+
+  <!-- Mobile Call Bar — sticky bottom on mobile, HVAC traffic is mostly urgent/mobile -->
+  <div class="mobile-call-bar" role="region" aria-label="Quick contact">
+    <a href="tel:4097294822" class="btn btn-accent" aria-label="Call Rutty HVAC at (409) 729-4822">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      Call Now
+    </a>
+    <a href="contact/" class="btn btn-primary">Free Estimate</a>
+  </div>
 
   <script src="assets/main.js"></script>
 </body>
