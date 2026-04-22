@@ -173,15 +173,47 @@ each change.
 - **Commit:** `ccbb472` — `Broaden secret redaction: token shapes +
   hidden-input + secret-attr`.
 
+### 2026-04-21 — Fifth crawl attempt (successful)
+
+- User re-triggered Site Crawl workflow on branch `claude/resume-work-uBFhI`.
+- Crawl + redact ran cleanly; push protection did not fire.
+- Commit `6305714` — `crawl: snapshot of https://www.ruttyandmorris.com`
+  landed on `claude/resume-work-uBFhI`.
+- 57 pages saved under `site-analysis/original/`; 213 assets in
+  `site-analysis/assets/`; `sitemap.txt`, `pages.csv`, `assets.csv`,
+  and `failures.txt` all written.
+
+### 2026-04-22 — Phase 2: Site analysis
+
+- **Analyzed** crawl output across all 57 pages plus 4 CSS stylesheets
+  and 17 JS bundles.
+- **Dimensions covered:** information architecture, design system,
+  content quality, UX/usability, accessibility, performance, SEO,
+  prioritized issue list.
+- **Key findings:**
+  - 30+ city-specific pages share ~70% boilerplate content — highest
+    SEO risk on the site.
+  - `og:site_name` and some `<title>` tags still reference old brand
+    name "Rutty and Morris LLC".
+  - `/ac-repair-[city]` and `/ac-service-[city]` pairs on all 6 cities
+    create keyword cannibalization.
+  - No `LocalBusiness` JSON-LD schema — most impactful missing SEO element
+    for a local contractor.
+  - JS bundles total ~800 KB; two chunks exceed 150 KB without apparent
+    route-level splitting.
+  - hCaptcha server secret exposed in page source (previously documented
+    in `security-findings.txt`) — also breaks form spam protection.
+  - No team bios, certifications, or visible testimonials in server-side HTML.
+- **Output:** `site-analysis/analysis-report.md` — full structured report
+  with scored summary and top-10 prioritized issues.
+- **Commit:** this session, branch `claude/resume-work-8oM7E`.
+
 ### Pending
 
-- User to re-trigger the Site Crawl workflow on branch
-  `claude/resume-work-uBFhI`. Redactor will strip the secret before
-  commit; push should succeed.
-- User to send the responsible-disclosure email on a parallel track,
-  independent of analysis timeline.
-- Proceed to Phase 2 (analysis) once crawl output is committed.
-- Pause before Phase 3 (redesign) for user review of priorities.
+- User to send the responsible-disclosure email for the hCaptcha secret
+  leak (draft in `site-analysis/disclosure-email.md`).
+- Review `analysis-report.md` and agree on Phase 3 scope/priorities
+  before beginning redesign work.
 
 ---
 
