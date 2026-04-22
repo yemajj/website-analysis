@@ -3,7 +3,7 @@
 **Subject:** Rutty HVAC & Refrigeration LLC  
 **Date:** 2026-04-22  
 **Scope:** Design, UX, accessibility, performance, SEO  
-**Pages analyzed:** 57 (all pages in crawl snapshot)  
+**Pages analyzed:** 55 (all pages in crawl snapshot)  
 **Method:** Observation-only crawl; no authentication, no form submission, no exploitation
 
 ---
@@ -24,9 +24,10 @@
 
 **Issues:**
 - `/refrigeration/` and `/ac-heating-ventilation-services/` are indexed (status 200) but not in the main nav — orphaned pages that split link equity.
-- `/reliable-ac-repair-in-orange-for-efficient-cooling-and-comfort/` is a long auto-generated URL with no apparent nav or footer link — orphan.
+- Three separate URLs target "Orange AC repair" and directly cannibalize each other: `/ac-repair-orange`, `/ac-repair-in-orange`, and `/reliable-ac-repair-in-orange-for-efficient-cooling-and-comfort/`. The last is a long auto-generated URL with no nav or footer link.
 - No breadcrumb navigation visible on any page; users cannot orient themselves in the site hierarchy.
 - City pages are siloed — they do not link to each other or back to related service pages, limiting internal link flow.
+- `/blog` contains no blog posts. It is a list of city service pages styled to look like blog post cards (same template, city names as post titles). There is no editorial content. The page is essentially empty from an SSR content perspective.
 
 ---
 
@@ -74,19 +75,27 @@
 
 ## 3. Content Quality
 
+**Phone number conflict (critical):**
+- The header CTA button on every page shows **(409) 729-4822**.
+- Body copy and section CTAs on many pages show **(409) 255-0063**.
+- Every visitor sees two different phone numbers. One is likely wrong or unmonitored. This erodes trust and guarantees some calls go unanswered.
+
 **Brand name inconsistency (critical):**
+- At least **four distinct name variants** appear across page titles: "Rutty HVAC & Refrigeration LLC", "Rutty and Morris LLC", "Rutty & Morris Air Conditioning", and "Rutty & Morris LLC".
 - Homepage `<title>`: "Rutty HVAC & Refrigeration LLC | Formerly Rutty and Morris LLC"
-- City page titles: often omit brand name entirely (e.g., "AC Repair Beaumont" only)
-- `<meta property="og:site_name">`: still "Rutty and Morris LLC" (old name) on most pages
-- About page: correctly uses new name
+- **36 of 55 pages** have no brand name in the `<title>` at all (e.g., "AC Repair Beaumont" only).
+- `<meta property="og:site_name">`: still "Rutty and Morris LLC" (old name) on **all 55 pages** — not just most.
+- Footer contact email is **team@ruttyandmorris.com** — an old-brand domain, inconsistent with the rebranded company name.
+- About page: correctly uses new name in body copy.
 
 **Thin / duplicated city pages:**
-~70% of content on city pages is boilerplate. The footer paragraph — "Providing expert air conditioning, ventilation, and refrigeration services across Southeast Texas since 2003" — is identical across all 30+ city pages. Intro paragraphs swap city names but follow the same template structure. This is the largest single SEO risk on the site.
+Text similarity analysis confirms **77% similarity** between same-service city pages. The footer paragraph — "Providing expert air conditioning, ventilation, and refrigeration services across Southeast Texas since 2003" — is identical across all 30+ city pages. Intro paragraphs swap city names but follow the same template structure. This is the largest single SEO risk on the site.
 
 **Missing content:**
 - No pricing or cost estimates on any page
 - No team member profiles, photos, or individual credentials on About
-- No explicit certifications listed (EPA 608, NATE, HVACR licensing numbers)
+- HVACR license numbers **are** present — buried in the footer (TACL A26326E, TACL B26326R) — but not surfaced on service or About pages where they build trust
+- The About page FAQ states that **free estimates and financing are available**, but neither is advertised on any service page or city landing page — a significant conversion opportunity being missed
 - No service guarantees or warranty information
 - No testimonials visible in crawled server-side HTML (may be client-rendered)
 
@@ -107,8 +116,11 @@
 - Images: Next.js srcset at 640w / 750w / 828w / 1080w / 1200w / 1920w / 2048w / 3840w ✓
 
 **Contact form (on `/contact`):**
-- Fields: Name, Email (type="email"), Phone (type="tel"), Message (textarea)
+- Fields: Name, Email (type="email"), Phone (type="tel"), Service (select — lists only 3 options), Message (textarea)
 - Submits → `/thank-you` page
+- **Accessibility failure:** All fields use placeholder text only — no `<label>` elements present. Screen readers and autofill cannot identify fields.
+- **Rendering bug:** Literal `"undefined"` appears in element class names, indicating a template variable that failed to resolve.
+- **Honeypot field** present in form HTML (hidden spam-trap input) — this is a deliberate anti-spam technique and is fine, but was unaccounted for in previous analysis.
 - No visible required-field indicators, inline validation, or loading state on submit
 - No spam protection visible in server-rendered HTML (hCaptcha integration exists but exposes the server secret — see `security-findings.txt`)
 
@@ -124,6 +136,8 @@
 
 ## 5. Accessibility
 
+**Skip links:** Zero skip-to-content links exist anywhere on the site. Keyboard and screen-reader users must tab through the entire nav on every page before reaching main content — a WCAG 2.4.1 (Level A) failure.
+
 **Image alt text:**
 - Logo: `alt="RUTTY_NEW_LOGO"` — passes, slightly machine-y
 - Gallery images: `alt="Gallery Section Image 1"` etc. — present but generic; not descriptive for screen readers
@@ -131,6 +145,8 @@
 - No `alt=""` decorative images found in sampled pages ✓
 
 **Heading hierarchy:** H1 appears once per page; H1 → H2 → H3 → H4 order is respected in sampled pages ✓
+
+**Forms:** Contact form uses placeholder text as the sole field label — no `<label>` elements. This fails WCAG 1.3.1 (Info and Relationships) and 3.3.2 (Labels or Instructions).
 
 **Interactive elements:** Proper `<button>` and `<a href>` elements used — no `<div onClick>` pattern observed ✓
 
@@ -152,7 +168,7 @@
 - No evidence of route-level code splitting for city pages
 
 **CSS:**
-- 4 stylesheets: `ba0e13ae2b49b4be.css`, `42ad67716ae75d64.css`, `969563ea15b6f69b.css`, `de5fed9b6164026f.css`
+- 5 stylesheets: `ba0e13ae2b49b4be.css`, `42ad67716ae75d64.css`, `969563ea15b6f69b.css`, `de5fed9b6164026f.css`, `fe5ed1f4af4d2619.css`
 - All loaded as `<link rel="stylesheet">` (render-blocking)
 - Bootstrap bundled alongside custom CSS — adds ~30 KB of unused rules
 
@@ -161,7 +177,11 @@
 - `loading="lazy"` on Next.js images ✓
 - 9 WOFF2 font files preloaded ✓
 
-**Total assets:** 213 (9 fonts, 4 CSS, 17 JS, 127 images, misc)
+**Resource hints:** No `<link rel="preconnect">` or `<link rel="dns-prefetch">` hints present. Third-party origins (Google Fonts, analytics, hCaptcha) are connected cold on every page load, adding latency.
+
+**Service worker:** None. No offline capability, no cache-first strategy for returning visitors.
+
+**Total assets:** 213 (9 fonts, 5 CSS, 17 JS, 127 images, misc)
 
 ---
 
@@ -178,7 +198,8 @@
 
 **Structured data:**
 - JSON-LD present: `WebPage`, `BreadcrumbList`, `WebSite` with `SearchAction`
-- **Missing:** `LocalBusiness` / `Organization` with address, phone, hours, geo coordinates, and `AggregateRating` — the most impactful schema for a local service business
+- `HVACBusiness` schema exists on **12 pages**; `LocalBusiness` schema exists on **2 pages** — not entirely absent as previously noted, but inconsistently deployed
+- Schema is missing from 43 of 55 pages; where present, it lacks address, phone, hours, geo coordinates, and `AggregateRating` — all critical for local pack eligibility
 
 **Internal linking:**
 - Nav provides 6 primary + 7 footer links per page
@@ -197,26 +218,27 @@
 ### Critical
 
 **1. Thin/duplicate city pages**
-- 30+ city pages share ~70% boilerplate content. Identical footer paragraphs, templated body, city name swapped in. High risk of Google ranking penalties and indexation demotion.
+- 30+ city pages share ~77% boilerplate content (text-similarity confirmed). Identical footer paragraphs, templated body, city name swapped in. High risk of Google ranking penalties and indexation demotion.
 - Fix: Consolidate to 6 genuine city landing pages with location-specific content (local testimonials, neighborhood references, area photos). Redirect thin duplicates.
 
-**2. Brand name inconsistency across SEO properties**
-- `og:site_name` still says "Rutty and Morris LLC" (old name); title tags mix old and new names; some city page titles omit brand name entirely.
-- Fix: Audit and standardize every `<title>`, `<meta name="description">`, `og:site_name`, and JSON-LD `name` field to "Rutty HVAC & Refrigeration LLC".
+**2. Brand name inconsistency + phone conflict across all pages**
+- Four distinct brand name variants appear in page titles: "Rutty HVAC & Refrigeration LLC", "Rutty and Morris LLC", "Rutty & Morris Air Conditioning", "Rutty & Morris LLC". `og:site_name` is the old brand on all 55 pages. 36 of 55 titles contain no brand name at all. The footer contact email (team@ruttyandmorris.com) is also on the old-brand domain.
+- Additionally, two different phone numbers appear on every page: (409) 729-4822 in the header, (409) 255-0063 in body copy. This inconsistency directly costs calls and undermines local SEO NAP consistency.
+- Fix: Standardize every `<title>`, `og:site_name`, JSON-LD `name`, footer email, and phone number to a single canonical brand and contact point.
 
-**3. AC Repair vs AC Service keyword cannibalization**
-- Both `/ac-repair-[city]` and `/ac-service-[city]` pages exist for all 6 cities with overlapping keyword intent. They split ranking authority.
-- Fix: Pick one primary URL per city/service. 301-redirect the other. If both pages must exist, give them clearly differentiated content (emergency repair vs. scheduled maintenance).
+**3. Keyword cannibalization — especially severe for Orange**
+- Both `/ac-repair-[city]` and `/ac-service-[city]` pages exist for all 6 cities. For Orange specifically, there are **three** competing URLs: `/ac-repair-orange`, `/ac-repair-in-orange`, and `/reliable-ac-repair-in-orange-for-efficient-cooling-and-comfort/`. All target the same search intent and split ranking authority three ways.
+- Fix: Pick one canonical URL per city/service. 301-redirect all variants. For Orange, consolidate all three into `/ac-repair-orange`. If repair vs. service must be distinguished, differentiate content explicitly (emergency repair vs. scheduled maintenance).
 
 ### Major
 
-**4. No LocalBusiness schema markup**
-- Schema only includes `WebPage` and `BreadcrumbList`. No address, phone, hours, or ratings in structured data.
-- Fix: Add `LocalBusiness` JSON-LD with full NAP (Name/Address/Phone), service area, business hours, and geo coordinates to every page via a shared layout component.
+**4. Incomplete and inconsistent structured data**
+- `HVACBusiness` schema exists on 12 pages; `LocalBusiness` on 2 pages; the remaining 43 pages have no local business schema at all. Where schema is present, it lacks NAP (Name/Address/Phone), business hours, geo coordinates, and `AggregateRating`.
+- Fix: Deploy `HVACBusiness` (subtype of `LocalBusiness`) via a shared layout component so it appears on all 55 pages. Populate with full NAP, service area, hours, geo coordinates. Add `AggregateRating` once review data is available.
 
-**5. Missing pricing and service scope information**
-- No pricing, service tiers, or estimate information on any page. Increases lead friction and reduces self-qualification.
-- Fix: At minimum, add "Free Estimates Available" with a prominent CTA. Optionally add a pricing or service tier page.
+**5. Free estimates and financing not advertised on service pages**
+- The About page FAQ confirms that free estimates and financing are available — but neither is mentioned on any service page or city landing page. Visitors making a purchase decision never see this information where it matters.
+- Fix: Add a "Free Estimates + Financing Available" callout block to every service and city page, linking to the About FAQ for details. This is a no-code content change with immediate conversion impact.
 
 **6. Large unoptimized JS bundles**
 - `559-990fc2169d096384.js` is 352 KB; `315-8e243165532a3251.js` is 166 KB. No visible route-level splitting for city pages. Total ~800 KB JS.
@@ -232,13 +254,17 @@
 - Mentions "factory-trained technicians" and "background checks" but has no staff profiles, certification badges (EPA 608, NATE, HVACR), or license numbers.
 - Fix: Add a team section with 3–5 technician profiles (photo, name, certifications). Add a credentials section with EPA/NATE badge images.
 
-**9. Orphaned pages not in navigation**
-- `/refrigeration/`, `/ac-heating-ventilation-services/`, and `/reliable-ac-repair-in-orange-for-efficient-cooling-and-comfort/` are indexed but unlinked.
-- Fix: 301-redirect each to the canonical equivalent (`/refrigeration-services`, `/hvac-services`, `/ac-repair-orange`). Remove from robots/sitemap if not redirecting.
+**9. Blog page contains no blog content**
+- `/blog` renders as a list of city service pages styled as blog post cards. There are no articles, no editorial content, no dates — it is a mislabeled page index. A blog link in the nav that leads to non-blog content confuses users and wastes a crawl slot.
+- Fix: Either populate the blog with genuine articles (highest SEO value) or remove the blog link from the nav and redirect `/blog` to `/service-areas` or the homepage.
 
-**10. Contact form lacks validation and spam protection**
-- No visible required-field indicators, inline validation errors, or submit loading state. hCaptcha integration is broken (secret key exposed in page source — see `security-findings.txt`).
-- Fix: Add HTML5 `required` + `pattern` attributes, visible error states, button loading state. Rotate hCaptcha secret key immediately; move to server-side environment variable.
+**10. Contact form: accessibility failures and rendering bug**
+- Form inputs use placeholder text only — no `<label>` elements. This fails WCAG 1.3.1 and 3.3.2 and breaks screen readers and browser autofill.
+- Literal `"undefined"` appears in element class names, indicating an unresolved template variable — a visible rendering bug.
+- The service `<select>` lists only 3 options, which likely does not cover all offered services.
+- hCaptcha integration is broken (secret key exposed in page source — see `security-findings.txt`).
+- Note: a honeypot anti-spam field is present and working as intended.
+- Fix: Add `<label>` elements for every input, fix the undefined class name bug, expand the service dropdown, rotate hCaptcha secret key immediately and move to a server-side environment variable.
 
 ---
 
@@ -246,13 +272,13 @@
 
 | Dimension | Score | Notes |
 |-----------|-------|-------|
-| Information architecture | 6/10 | Logical structure, orphan pages, no breadcrumbs |
+| Information architecture | 5/10 | Orphan pages, 3 cannibalizing Orange URLs, fake blog page, no breadcrumbs |
 | Design consistency | 6/10 | Token system exists, Bootstrap bloat, ad-hoc overrides |
-| Content quality | 4/10 | Thin city pages, brand inconsistency, missing trust signals |
-| UX / usability | 7/10 | Phone CTA excellent, form gaps, redundant page types |
-| Accessibility | 7/10 | Semantic HTML, decent alt text, minor ARIA gaps |
-| Performance | 5/10 | Next.js helps, large JS bundles, no WebP confirmed |
-| SEO | 5/10 | Good structure, cannibalization risk, missing local schema |
-| Trust signals | 4/10 | No team bios, no certs, no visible testimonials, broken captcha |
+| Content quality | 3/10 | 77% duplicate city pages, 4 brand variants, dual phone numbers, free estimates/financing buried |
+| UX / usability | 6/10 | Header phone CTA good; form rendering bug, undefined class names, select limited to 3 services |
+| Accessibility | 5/10 | Zero skip links, no form labels (both WCAG A failures), otherwise decent semantic HTML |
+| Performance | 5/10 | Next.js helps, large JS bundles, no WebP confirmed, no preconnect hints, no service worker |
+| SEO | 5/10 | Schema partial (12/55 pages), severe Orange cannibalization, og:site_name wrong on all 55 pages |
+| Trust signals | 5/10 | Licenses in footer (good), no team bios/certs on About, broken captcha, financing not surfaced |
 
-**Overall:** The site has a solid technical foundation (Next.js, responsive, canonical tags, meta descriptions) but is being held back by a content strategy that mass-produces near-duplicate city pages and has not been updated to reflect the company's rebrand. The two highest-leverage fixes before any visual redesign are: (1) consolidate city pages and (2) add LocalBusiness schema.
+**Overall:** The site has a solid technical foundation (Next.js, responsive, canonical tags, meta descriptions) but is undermined by a rebrand that was applied inconsistently — four brand name variants still exist, two phone numbers appear on every page, and the old brand's email domain is in the footer. Content strategy mass-produces near-duplicate city pages (77% similarity confirmed) and a blog page that contains no blog posts. The three highest-leverage fixes are: (1) resolve the phone number and brand name conflicts site-wide, (2) consolidate city pages with genuine local content, and (3) deploy complete HVACBusiness schema to all pages.
