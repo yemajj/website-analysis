@@ -23,6 +23,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -39,14 +41,30 @@ jobs:
             --max-pages ${{ inputs.max_pages }} \
             --output site-analysis
 
+      - name: Redact known secrets
+        run: |
+          python scripts/redact_secrets.py \
+            --root site-analysis/original \
+            --log site-analysis/security-findings.txt
+
       - name: Commit results
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add site-analysis
           if git diff --staged --quiet; then
             echo "No changes to commit."
-          else
-            git commit -m "crawl: snapshot of ${{ inputs.target }}"
-            git push origin HEAD:${{ github.ref_name }}
+            exit 0
           fi
+          git commit -m "crawl: snapshot of ${{ inputs.target }}"
+          for attempt in 1 2 3; do
+            if git pull --rebase origin "${{ github.ref_name }}" \
+               && git push origin "HEAD:${{ github.ref_name }}"; then
+              exit 0
+            fi
+            echo "push attempt $attempt failed; retrying in 3s..."
+            sleep 3
+          done
+          echo "push failed after 3 attempts"
+          exit 1
