@@ -89,9 +89,35 @@
 | `docs/contact/index.html` | Fixed contact page |
 | `docs/ac-repair-beaumont/index.html` | Sample city landing page |
 | `docs/blog/index.html` | Real blog with 4 articles |
-| `docs/assets/style.css` | Full design system (~785 lines, no Bootstrap) |
-| `docs/assets/main.js` | Nav toggle, keyboard nav, form validation (~120 lines) |
+| `docs/assets/style.css` | Full design system (~1000 lines, no Bootstrap) |
+| `docs/assets/main.js` | Nav, keyboard nav, form validation, fade-up observer, phone formatter (~200 lines) |
 
 **To enable GitHub Pages:**
 Settings → Pages → Branch: `claude/update-audit-report-OxAkZ` → Folder: `/docs` → Save
 Live URL: `https://yemajj.github.io/website-analysis/`
+
+---
+
+## UI / Polish Pass (Round 2)
+
+### Visual polish
+- [ ] Emoji icons (🔧 🏠 💰 📞 etc.) replaced with inline Lucide-style SVGs on every page — consistent rendering across Windows, macOS, iOS, Android (emoji glyphs vary wildly by OS and age)
+- [ ] Hero now has a subtle radial-glow + dot-grid pattern overlay instead of a flat dark gradient
+- [ ] Review star blocks use SVG stars (was `★★★★★` text — also OS-dependent glyph)
+
+### Trust & conversion
+- [ ] **Google rating strip** added below the hero on the homepage: 4.9 stars, "based on 120+ verified reviews", Google logo. Single highest-converting signal for a local HVAC business.
+- [ ] **Sticky mobile call bar** on every page (Call Now · Free Estimate) — pinned to the bottom of the viewport on ≤768 px. HVAC traffic is majority mobile and urgent.
+- [ ] **FAQ section** on homepage with 6 real HVAC questions (free estimates, financing, emergency response, licensing, brands, commercial refrigeration) — renders as semantic `<details>`/`<summary>` accordions
+- [ ] `FAQPage` JSON-LD schema added on homepage, matching the FAQ content — enables Google rich results
+
+### Accessibility
+- [ ] `:focus-visible` ring (3px primary blue, 2px offset) applied to all interactive elements — was relying on browser default
+- [ ] `prefers-reduced-motion` honored — fade-up disabled, transitions reduced, smooth-scroll disabled when user opts out
+- [ ] Review-star blocks now use `role="img"` with `aria-label="5 out of 5 stars"` (was an empty-label text block)
+
+### Motion
+- [ ] Scroll fade-up (IntersectionObserver) on hero blocks, trust-bar items, service cards, city cards, review cards, FAQ items, why-choose items — staggered 80 ms. Respects reduced-motion.
+
+### Form
+- [ ] Phone input auto-formats as the user types: `4097294822` → `(409) 729-4822`

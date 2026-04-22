@@ -818,3 +818,223 @@ select.form-input {
   .trust-bar-grid { grid-template-columns: 1fr 1fr; }
   .trust-row-light { grid-template-columns: 1fr; }
 }
+
+/* 22. Icons (inline SVG — replacing emoji for cross-platform consistency)
+   ============================================================ */
+.icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+  vertical-align: -3px;
+}
+.icon-fill { fill: currentColor; stroke: none; }
+.icon-lg { width: 26px; height: 26px; }
+.icon-xl { width: 40px; height: 40px; stroke-width: 1.75; }
+
+/* Service card icons: inside circle background */
+.service-icon .icon { width: 28px; height: 28px; color: var(--color-primary); }
+.trust-icon .icon { color: var(--color-white); }
+.contact-info-icon .icon { color: var(--color-white); width: 18px; height: 18px; }
+.footer-contact-icon .icon { color: var(--color-primary); width: 16px; height: 16px; }
+.estimates-callout-icon .icon { color: var(--color-dark-deepest); }
+.hero-badge .icon { color: var(--color-dark-deepest); width: 14px; height: 14px; }
+.btn .icon { width: 18px; height: 18px; }
+.btn-lg .icon { width: 20px; height: 20px; }
+.hero-note .icon { width: 14px; height: 14px; color: var(--color-highlight); vertical-align: -2px; }
+.why-choose-check .icon { width: 14px; height: 14px; stroke-width: 3; color: var(--color-white); }
+.review-stars .icon { color: var(--color-highlight); width: 18px; height: 18px; }
+.rating-stars .icon { color: var(--color-highlight); }
+
+/* 23. Focus-visible (keyboard accessibility improvement)
+   ============================================================ */
+:focus { outline: none; }
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.form-input:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+.btn-accent:focus-visible { outline-color: var(--color-highlight); }
+.hero a:focus-visible,
+.bg-mid a:focus-visible,
+.cta-banner a:focus-visible,
+.site-footer a:focus-visible,
+.contact-info-card a:focus-visible { outline-color: var(--color-highlight); }
+
+/* 24. Mobile Call Bar (sticky bottom — mobile only)
+   ============================================================ */
+.mobile-call-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 950;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+  gap: 10px;
+}
+.mobile-call-bar .btn {
+  flex: 1;
+  height: 48px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+@media (max-width: 768px) {
+  .mobile-call-bar { display: flex; }
+  body { padding-bottom: 76px; }
+}
+
+/* 25. Google Rating Strip
+   ============================================================ */
+.rating-strip {
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  padding: 14px 0;
+}
+.rating-strip-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+.rating-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-dark-deepest);
+}
+.rating-stars {
+  display: inline-flex;
+  gap: 2px;
+  align-items: center;
+}
+.rating-count {
+  color: var(--color-body-text);
+  opacity: 0.75;
+}
+.rating-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-body-text);
+}
+.rating-logo svg { width: 18px; height: 18px; }
+@media (max-width: 575px) {
+  .rating-strip-inner { gap: 10px; font-size: 13px; }
+}
+
+/* 26. FAQ Accordion (<details>/<summary> — semantic, no JS needed)
+   ============================================================ */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 820px;
+  margin: 0 auto;
+}
+.faq-item {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  transition: box-shadow var(--t), border-color var(--t);
+}
+.faq-item[open] {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 14px rgba(46,150,209,0.12);
+}
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 56px 18px 22px;
+  font-weight: var(--fw-semibold);
+  font-size: 16px;
+  color: var(--color-dark-deepest);
+  position: relative;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: '';
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+  transform: translateY(-75%) rotate(45deg);
+  transition: transform var(--t);
+}
+.faq-item[open] summary::after {
+  transform: translateY(-25%) rotate(-135deg);
+}
+.faq-item .faq-body {
+  padding: 0 22px 20px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-body-text);
+}
+.faq-item .faq-body a { color: var(--color-primary); font-weight: var(--fw-medium); }
+.faq-item .faq-body a:hover { text-decoration: underline; }
+
+/* 27. Hero Background Pattern (subtle dot grid + glow)
+   ============================================================ */
+.hero { position: relative; }
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 30%, rgba(46,150,209,0.22), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(255,202,99,0.06), transparent 40%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle cx='1.5' cy='1.5' r='1' fill='%23ffffff' opacity='0.08'/></svg>");
+  background-size: cover, cover, 36px 36px;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero > .container { position: relative; z-index: 1; }
+
+/* 28. Scroll Fade-Up Animation
+   ============================================================ */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: opacity, transform;
+}
+.fade-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-up[data-delay="1"] { transition-delay: 0.08s; }
+.fade-up[data-delay="2"] { transition-delay: 0.16s; }
+.fade-up[data-delay="3"] { transition-delay: 0.24s; }
+.fade-up[data-delay="4"] { transition-delay: 0.32s; }
+.fade-up[data-delay="5"] { transition-delay: 0.40s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
